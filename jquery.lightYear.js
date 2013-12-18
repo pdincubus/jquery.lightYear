@@ -30,9 +30,9 @@
             *      initial setup
             *----------------------------------------------------*/
             //how wide are the slides? include margin in calculation
-            var itemWidth = $('#' + settings.slideContainer + ' ul li').outerWidth(true),
+            var itemWidth = $('#' + settings.slideContainer + ' > ul > li').outerWidth(true),
                 //how many slides are there?
-                numSlides = $('#' + settings.slideContainer + ' ul li').size(),
+                numSlides = $('#' + settings.slideContainer + ' > ul > li').size(),
                 //slides total width
                 listWidth = numSlides * itemWidth,
                 //set up variable in advance of use
@@ -42,9 +42,12 @@
                 $('#' + settings.navNext + ', #' + settings.navPrev).hide();
             } else {
                 //shift the last item before the first in case someone clicks prev first
-                $('#' + settings.slideContainer + ' ul li:first').before( $('#' + settings.slideContainer + ' ul li:last') );
+                $('#' + settings.slideContainer + ' > ul > li:first').before( $('#' + settings.slideContainer + ' > ul > li:last') );
+                //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
+                $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
                 //pull the list left a bit to hide the last slide from screen, and set the width of it automagically
-                $('#' + settings.slideContainer + ' ul').css({
+                $('#' + settings.slideContainer + ' > ul').css({
                     left: '-' + itemWidth + 'px',
                     width: listWidth
                 });
@@ -54,15 +57,18 @@
             *      auto slider function
             *----------------------------------------------------*/
             function autoSliding() {
-                leftIndent = ( parseInt( $('#' + settings.slideContainer + ' ul').css('left'), 10) - itemWidth );
+                leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) - itemWidth );
 
-                $('#' + settings.slideContainer + ' ul').animate({
+                $('#' + settings.slideContainer + ' > ul').animate({
                     left : leftIndent
                 }, parseInt(settings.animationDuration, 10), settings.slideEasing, function(){
                     //get the first list item and put it after the last list item
-                    $('#' + settings.slideContainer + ' ul li:last').after( $('#' + settings.slideContainer + ' ul li:first') );
+                    $('#' + settings.slideContainer + ' > ul > li:last').after( $('#' + settings.slideContainer + ' > ul > li:first') );
+                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
+                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
                     //and set default left position again
-                    $('#' + settings.slideContainer + ' ul').css({
+                    $('#' + settings.slideContainer + ' > ul').css({
                         left : '-' + itemWidth + 'px'
                     });
                 });
@@ -89,20 +95,22 @@
                 }
 
                 //prevent animation queueing
-                if ( $('#' + settings.slideContainer + ' ul').is(':animated') === true ) {
+                if ( $('#' + settings.slideContainer + ' > ul').is(':animated') === true ) {
                     return;
                 }
 
-                leftIndent = ( parseInt( $('#' + settings.slideContainer + ' ul').css('left'), 10) - itemWidth );
+                leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) - itemWidth );
 
-                $('#' + settings.slideContainer + ' ul').animate({
+                $('#' + settings.slideContainer + ' > ul').animate({
                     left : leftIndent
                 }, parseInt(settings.animationDuration, 10), settings.slideEasing, function(){
                     //get the first list item and put it after the last list item
-                    $('#' + settings.slideContainer + ' ul li:last').after( $('#' + settings.slideContainer + ' ul li:first') );
-
+                    $('#' + settings.slideContainer + ' > ul > li:last').after( $('#' + settings.slideContainer + ' > ul > li:first') );
+                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
+                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
                     //and set default left position again
-                    $('#' + settings.slideContainer + ' ul').css({
+                    $('#' + settings.slideContainer + ' > ul').css({
                         left : '-' + itemWidth + 'px'
                     });
                 });
@@ -125,20 +133,22 @@
                 }
 
                 //prevent animation queueing
-                if ( $('#' + settings.slideContainer + ' ul').is(':animated') === true ) {
+                if ( $('#' + settings.slideContainer + ' > ul').is(':animated') === true ) {
                     return;
                 }
 
-                leftIndent = ( parseInt( $('#' + settings.slideContainer + ' ul').css('left'), 10) + itemWidth );
+                leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) + itemWidth );
 
-                $('#' + settings.slideContainer + ' ul').animate({
+                $('#' + settings.slideContainer + ' > ul').animate({
                     left : leftIndent
                 }, parseInt(settings.animationDuration, 10), settings.slideEasing, function(){
                     //get the last list item and put it before the first list item
-                    $('#' + settings.slideContainer + ' ul li:first').before( $('#' + settings.slideContainer + ' ul li:last') );
-
+                    $('#' + settings.slideContainer + ' > ul > li:first').before( $('#' + settings.slideContainer + ' > ul > li:last') );
+                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
+                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
                     //and set default left position again
-                    $('#' + settings.slideContainer + ' ul').css({
+                    $('#' + settings.slideContainer + ' > ul').css({
                         left : '-' + itemWidth + 'px'
                     });
                 });
