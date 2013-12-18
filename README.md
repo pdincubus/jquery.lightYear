@@ -128,6 +128,10 @@ It's just a carousel the you can just keep on clicking.
     left: 15px;
     right: 15px;
 }
+
+.invisible {
+    visibility: hidden;
+}
 ```
 
 ### Add the right scriptages to your page
