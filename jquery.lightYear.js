@@ -99,20 +99,23 @@
                     return;
                 }
 
+                //figure out the distance
                 leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) - itemWidth );
+                //remove all invisibility classes so we don't get any weird flickering
+                $('#' + settings.slideContainer + ' > ul > li').removeClass('invisible');
 
+                //animate the list
                 $('#' + settings.slideContainer + ' > ul').animate({
                     left : leftIndent
                 }, parseInt(settings.animationDuration, 10), settings.slideEasing, function(){
                     //get the first list item and put it after the last list item
                     $('#' + settings.slideContainer + ' > ul > li:last').after( $('#' + settings.slideContainer + ' > ul > li:first') );
-                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
-                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
-                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
                     //and set default left position again
-                    $('#' + settings.slideContainer + ' > ul').css({
+                    $('#' + settings.slideContainer + ' >   ul').css({
                         left : '-' + itemWidth + 'px'
                     });
+                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                    $('#' + settings.slideContainer + ' > ul > li').not(':eq(1)').addClass('invisible');
                 });
 
                 //set the timer going again
@@ -137,20 +140,23 @@
                     return;
                 }
 
+                //figure out the distance
                 leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) + itemWidth );
-
+                //remove all invisibility classes so we don't get any weird flickering
+                $('#' + settings.slideContainer + ' > ul > li').removeClass('invisible');
+                //animate the list
                 $('#' + settings.slideContainer + ' > ul').animate({
                     left : leftIndent
                 }, parseInt(settings.animationDuration, 10), settings.slideEasing, function(){
                     //get the last list item and put it before the first list item
                     $('#' + settings.slideContainer + ' > ul > li:first').before( $('#' + settings.slideContainer + ' > ul > li:last') );
-                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
-                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
-                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
                     //and set default left position again
                     $('#' + settings.slideContainer + ' > ul').css({
                         left : '-' + itemWidth + 'px'
                     });
+
+                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                    $('#' + settings.slideContainer + ' > ul > li').not(':eq(1)').addClass('invisible');
                 });
 
                 //set the timer going again
