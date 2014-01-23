@@ -22,17 +22,37 @@
             'waitTime' : 4000,                       //duration of pause between shlides
             'slideContainer' : 'lightYearContain',   //id that holds JUST the ul for the slides
             'navNext' : 'navNext',                   //id for next button
-            'navPrev' : 'navPrev'                    //id for prev button
+            'navPrev' : 'navPrev',                   //id for prev button
+            'dynamicSlideSize' : false,               //set to true if you have a resize event calculating the width/height of the slide container
+            'preventOffscreenKeyboardNav' : false    //if you have tabbable items in your slides, change to true to prevent breakage
         }, options);
 
         return this.each(function() {
             /*----------------------------------------------------
             *      initial setup
             *----------------------------------------------------*/
-            //how wide are the slides? include margin in calculation
-            var itemWidth = $('#' + settings.slideContainer + ' > ul > li').outerWidth(true),
-                //how many slides are there?
-                numSlides = $('#' + settings.slideContainer + ' > ul > li').size(),
+            var itemWidth = 0;
+
+            if( settings.dynamicSlideSize === true ) {
+                //how wide is the slide container?
+                itemWidth = $('#' + settings.slideContainer).outerWidth(true);
+                var itemHeight = $('#' + settings.slideContainer).outerHeight(true);
+                //set the list items to the correct width and height of the current screen/window width and height
+                $('#' + settings.slideContainer + ' > ul > li').css({
+                    width: itemWidth,
+                    height: itemHeight
+                });
+                //probably also want to set the height of the list itself too
+                $('#' + settings.slideContainer + ' > ul').css({
+                    height: itemHeight
+                });
+            } else {
+                //how wide are the slides? include margin in calculation
+                itemWidth = $('#' + settings.slideContainer + ' > ul > li').outerWidth(true);
+            }
+
+            var //how many slides are there?
+                numSlides = $('#' + settings.slideContainer + ' > ul > li').size();
                 //slides total width
                 listWidth = numSlides * itemWidth,
                 //set up variable in advance of use
@@ -43,9 +63,12 @@
             } else {
                 //shift the last item before the first in case someone clicks prev first
                 $('#' + settings.slideContainer + ' > ul > li:first').before( $('#' + settings.slideContainer + ' > ul > li:last') );
-                //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
-                $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
-                $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
+
+                if ( settings.preventOffscreenKeyboardNav === true ) {
+                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
+                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
+                }
                 //pull the list left a bit to hide the last slide from screen, and set the width of it automagically
                 $('#' + settings.slideContainer + ' > ul').css({
                     left: '-' + itemWidth + 'px',
@@ -64,9 +87,13 @@
                 }, parseInt(settings.animationDuration, 10), settings.slideEasing, function(){
                     //get the first list item and put it after the last list item
                     $('#' + settings.slideContainer + ' > ul > li:last').after( $('#' + settings.slideContainer + ' > ul > li:first') );
-                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
-                    $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
-                    $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
+
+                    if ( settings.preventOffscreenKeyboardNav === true ) {
+                        //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                        $('#' + settings.slideContainer + ' > ul > li').addClass('invisible');
+                        $('#' + settings.slideContainer + ' > ul > li').eq(1).removeClass('invisible');
+                    }
+
                     //and set default left position again
                     $('#' + settings.slideContainer + ' > ul').css({
                         left : '-' + itemWidth + 'px'
@@ -101,8 +128,11 @@
 
                 //figure out the distance
                 leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) - itemWidth );
-                //remove all invisibility classes so we don't get any weird flickering
-                $('#' + settings.slideContainer + ' > ul > li').removeClass('invisible');
+
+                if ( settings.preventOffscreenKeyboardNav === true ) {
+                    //remove all invisibility classes so we don't get any weird flickering
+                    $('#' + settings.slideContainer + ' > ul > li').removeClass('invisible');
+                }
 
                 //animate the list
                 $('#' + settings.slideContainer + ' > ul').animate({
@@ -114,8 +144,11 @@
                     $('#' + settings.slideContainer + ' >   ul').css({
                         left : '-' + itemWidth + 'px'
                     });
-                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
-                    $('#' + settings.slideContainer + ' > ul > li').not(':eq(1)').addClass('invisible');
+
+                    if ( settings.preventOffscreenKeyboardNav === true ) {
+                        //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                        $('#' + settings.slideContainer + ' > ul > li').not(':eq(1)').addClass('invisible');
+                    }
                 });
 
                 //set the timer going again
@@ -142,8 +175,12 @@
 
                 //figure out the distance
                 leftIndent = ( parseInt( $('#' + settings.slideContainer + ' > ul').css('left'), 10) + itemWidth );
-                //remove all invisibility classes so we don't get any weird flickering
-                $('#' + settings.slideContainer + ' > ul > li').removeClass('invisible');
+
+                if ( settings.preventOffscreenKeyboardNav === true ) {
+                    //remove all invisibility classes so we don't get any weird flickering
+                    $('#' + settings.slideContainer + ' > ul > li').removeClass('invisible');
+                }
+
                 //animate the list
                 $('#' + settings.slideContainer + ' > ul').animate({
                     left : leftIndent
@@ -155,8 +192,10 @@
                         left : '-' + itemWidth + 'px'
                     });
 
-                    //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
-                    $('#' + settings.slideContainer + ' > ul > li').not(':eq(1)').addClass('invisible');
+                    if ( settings.preventOffscreenKeyboardNav === true ) {
+                        //we need to ensure no other slide except the one on screen can be tabbed to... i.e - the second in the list
+                        $('#' + settings.slideContainer + ' > ul > li').not(':eq(1)').addClass('invisible');
+                    }
                 });
 
                 //set the timer going again
